@@ -1,0 +1,183 @@
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Button } from "../ui/button";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+
+interface ImageData {
+  url: string;
+  time: string;
+  event: string;
+}
+
+interface HomeSectionProps {
+  images?: string[]
+  imageData?: ImageData[]
+}
+
+const defaultImages = [
+  "https://images.unsplash.com/photo-1722805740177-04256b6517f2?w=1200&q=80",
+  "https://images.unsplash.com/photo-1571984129381-41d698ebca6b?w=1200&q=80",
+  "https://images.unsplash.com/photo-1520886272478-69aed2b3685b?w=1200&q=80",
+  "https://images.unsplash.com/photo-1580824456266-c578703e13da?w=1200&q=80",
+  "https://images.unsplash.com/photo-1698802060858-f585123570cd?w=1200&q=80",
+]
+
+const defaultImageData: ImageData[] = [
+  { url: defaultImages[0], time: "2:00 PM", event: "Ceremony Begins" },
+  { url: defaultImages[1], time: "3:30 PM", event: "Cocktail Hour" },
+  { url: defaultImages[2], time: "5:00 PM", event: "Reception Dinner" },
+  { url: defaultImages[3], time: "7:00 PM", event: "First Dance" },
+  { url: defaultImages[4], time: "9:00 PM", event: "Celebration Continues" },
+]
+
+export function HomeSection({ images = defaultImages, imageData = defaultImageData }: HomeSectionProps) {
+  const [positionIndexes, setPositionIndexes] = useState([0, 1, 2, 3, 4]);
+  
+  // Get current image index (the center image)
+  const currentImageIndex = 4 - positionIndexes[4];
+  const currentImageUrl = images[currentImageIndex];
+  
+  // Find matching image data by URL or fall back to index
+  const currentImageData = imageData.find(data => data.url === currentImageUrl) 
+    || imageData[currentImageIndex] 
+    || { time: "", event: "" };
+
+  const handleNext = () => {
+    setPositionIndexes((prevIndexes) => {
+      const updatedIndexes = prevIndexes.map(
+        (prevIndex) => (prevIndex + 1) % 5
+      );
+      return updatedIndexes;
+    });
+  };
+
+  const handleBack = () => {
+    setPositionIndexes((prevIndexes) => {
+      const updatedIndexes = prevIndexes.map(
+        (prevIndex) => (prevIndex + 4) % 5
+      );
+
+      return updatedIndexes;
+    });
+  };
+
+  const createRotateArray = (index: number) => {
+    if (index > 4 || index < 0) throw new Error("Index must be between 0 and 4");
+  
+    // Create base sequence [0, 1, 2, 3, 4]
+    const arr = Array.from({ length: 5 }, (_, i) => i);
+  
+    // Rotate the array so that the last element equals 4 - index
+    const rotated = arr.map((_, i) => (i - index + 5) % 5);
+    return rotated;
+  }
+  const handleImageClick = (index: number) => {
+    setPositionIndexes(createRotateArray(index));
+  };
+
+  const positions = ["center", "left1", "left", "right", "right1"];
+
+  const imageVariants = {
+    center: { x: "0%", scale: 1, zIndex: 5, opacity: 1 },
+    left1: { x: "-50%", scale: 0.7, zIndex: 3, opacity: 1 },
+    left: { x: "-90%", scale: 0.5, zIndex: 2, opacity: 1 },
+    right: { x: "90%", scale: 0.5, zIndex: 1, opacity: 1 },
+    right1: { x: "50%", scale: 0.7, zIndex: 3, opacity: 1 },
+    hidden: { x: "0%", scale: 1, zIndex: 5, opacity: 0 },
+  };
+
+  return (
+    <section id="home" className="relative h-screen w-full overflow-hidden">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={4 - positionIndexes[4]}
+          initial={{ scale: 1.1, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 1.1, opacity: 0 }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
+          className="absolute inset-0"
+        >
+          <img
+            src={images[4 - positionIndexes[4]]}
+            alt={`Slide ${4 - positionIndexes[4] + 1}`}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/20" />
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Hero Title */}
+      <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentImageIndex}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            className="text-center relative py-8 px-12 w-[800px] max-w-[calc(100%-80px)]"
+          >
+            {/* Top-left square angle */}
+            <div className="absolute top-0 left-0 w-36 h-16 border-t-2 border-l-2 border-white"></div>
+            
+            {/* Bottom-right square angle */}
+            <div className="absolute bottom-0 right-0 w-36 h-16 border-b-2 border-r-2 border-white"></div>
+            
+            <motion.div
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.4 }}
+              className="flex flex-col items-center justify-center text-white"
+            >
+              <h1 className="text-5xl md:text-7xl font-bold mb-4 drop-shadow-2xl">
+                {currentImageData.event}
+              </h1>
+              <p className="text-2xl md:text-4xl font-light drop-shadow-lg">
+                {currentImageData.time}
+              </p>
+            </motion.div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Image thumbnails at bottom */}
+      <div className="absolute w-[calc(100%-80px)] max-w-[500px] bottom-0 left-1/2 -translate-x-1/2 z-10">
+        <div className="flex items-center flex-col justify-center">
+          {images.map((image, index) => (
+            <motion.img
+              key={index}
+              src={image}
+              alt={image}
+              className="rounded-[12px] shadow-2xl border border-white/20"
+              initial="hidden"
+              animate={positions[positionIndexes[index]]}
+              variants={imageVariants}
+              transition={{ duration: 0.5 }}
+              style={{ width: "40%", position: "absolute" }}
+              onClick={() => handleImageClick(index)}
+            />
+          ))}
+          <div className="h-[300px]">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%+40px)] flex flex-row justify-between">
+              <Button
+                variant="outline" size="icon"
+                className="text-white bg-transparent rounded-[50%] py-2 px-4"
+                onClick={handleBack}
+              >
+                <ChevronLeftIcon className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="outline" size="icon"
+                className="text-white bg-transparent rounded-[50%] py-2 px-4"
+                onClick={handleNext}
+              >
+                <ChevronRightIcon className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
