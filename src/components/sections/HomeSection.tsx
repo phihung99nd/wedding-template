@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "../ui/button";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
@@ -23,15 +23,16 @@ const defaultImages = [
 ]
 
 const defaultImageData: ImageData[] = [
-  { url: defaultImages[0], time: "2:00 PM", event: "Ceremony Begins" },
-  { url: defaultImages[1], time: "3:30 PM", event: "Cocktail Hour" },
-  { url: defaultImages[2], time: "5:00 PM", event: "Reception Dinner" },
-  { url: defaultImages[3], time: "7:00 PM", event: "First Dance" },
-  { url: defaultImages[4], time: "9:00 PM", event: "Celebration Continues" },
+  { url: defaultImages[0], time: "15-03-2026", event: "Thai Duong & Khanh Linh" },
+  { url: defaultImages[1], time: "15-03-2026", event: "Thai Duong & Khanh Linh" },
+  { url: defaultImages[2], time: "15-03-2026", event: "Thai Duong & Khanh Linh" },
+  { url: defaultImages[3], time: "15-03-2026", event: "Thai Duong & Khanh Linh" },
+  { url: defaultImages[4], time: "15-03-2026", event: "Thai Duong & Khanh Linh" },
 ]
 
 export function HomeSection({ images = defaultImages, imageData = defaultImageData }: HomeSectionProps) {
   const [positionIndexes, setPositionIndexes] = useState([0, 1, 2, 3, 4]);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   
   // Get current image index (the center image)
   const currentImageIndex = 4 - positionIndexes[4];
@@ -42,6 +43,20 @@ export function HomeSection({ images = defaultImages, imageData = defaultImageDa
     || imageData[currentImageIndex] 
     || { time: "", event: "" };
 
+  // Function to reset the auto-slide interval
+  const resetInterval = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    intervalRef.current = setInterval(() => {
+      setPositionIndexes((prevIndexes) => {
+        return prevIndexes.map(
+          (prevIndex) => (prevIndex + 1) % 5
+        );
+      });
+    }, 5000);
+  };
+
   const handleNext = () => {
     setPositionIndexes((prevIndexes) => {
       const updatedIndexes = prevIndexes.map(
@@ -49,6 +64,7 @@ export function HomeSection({ images = defaultImages, imageData = defaultImageDa
       );
       return updatedIndexes;
     });
+    resetInterval();
   };
 
   const handleBack = () => {
@@ -59,6 +75,7 @@ export function HomeSection({ images = defaultImages, imageData = defaultImageDa
 
       return updatedIndexes;
     });
+    resetInterval();
   };
 
   const createRotateArray = (index: number) => {
@@ -73,7 +90,19 @@ export function HomeSection({ images = defaultImages, imageData = defaultImageDa
   }
   const handleImageClick = (index: number) => {
     setPositionIndexes(createRotateArray(index));
+    resetInterval();
   };
+
+  // Set up auto-slide interval on mount and clean up on unmount
+  useEffect(() => {
+    resetInterval();
+    
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
 
   const positions = ["center", "left1", "left", "right", "right1"];
 
@@ -118,10 +147,10 @@ export function HomeSection({ images = defaultImages, imageData = defaultImageDa
             className="text-center relative py-8 px-12 w-[800px] max-w-[calc(100%-80px)]"
           >
             {/* Top-left square angle */}
-            <div className="absolute top-0 left-0 w-36 h-16 border-t-2 border-l-2 border-white"></div>
+            <div className="absolute top-0 left-0 w-64 h-16 border-t-2 border-l-2 border-white"></div>
             
             {/* Bottom-right square angle */}
-            <div className="absolute bottom-0 right-0 w-36 h-16 border-b-2 border-r-2 border-white"></div>
+            <div className="absolute bottom-0 right-0 w-64 h-16 border-b-2 border-r-2 border-white"></div>
             
             <motion.div
               initial={{ scale: 0.9 }}
@@ -129,10 +158,13 @@ export function HomeSection({ images = defaultImages, imageData = defaultImageDa
               transition={{ delay: 0.2, duration: 0.4 }}
               className="flex flex-col items-center justify-center text-white"
             >
-              <h1 className="text-5xl md:text-7xl font-bold mb-4 drop-shadow-2xl">
+              <h1 className="text-5xl md:text-7xl mb-4 drop-shadow-2xl font-hermaiona">
                 {currentImageData.event}
               </h1>
-              <p className="text-2xl md:text-4xl font-light drop-shadow-lg">
+              <h3 className="text-2xl md:text-3xl font-light mb-4 drop-shadow-2xl">
+                We're getting married!
+              </h3>
+              <p className="text-2xl font-light drop-shadow-lg">
                 {currentImageData.time}
               </p>
             </motion.div>

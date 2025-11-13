@@ -58,7 +58,7 @@ export function Navigation() {
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         scrolled
           ? "bg-background/95 backdrop-blur-sm shadow-md"
-          : "bg-transparent shadow-md"
+          : "bg-transparent backdrop-blur-xs shadow-md"
       )}
     >
       <div className="container mx-auto px-4 py-4">
@@ -71,7 +71,8 @@ export function Navigation() {
               onClick={() => scrollToSection(section.id)}
               className={cn(
                 "transition-colors",
-                activeSection === section.id && "bg-accent"
+                scrolled ? "text-black" : "text-white",
+                activeSection === section.id && "bg-accent text-black",
               )}
             >
               {section.label}
