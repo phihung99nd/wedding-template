@@ -7,14 +7,20 @@ interface CoupleSectionProps {
   weddingDate?: Date
   bride?: {
     name: string
-    parent: string
+    parent: {
+      father: string
+      mother: string
+    }
     birthday: string
     description: string
     avatar: string
   }
   groom?: {
     name: string
-    parent: string
+    parent: {
+      father: string
+      mother: string
+    }
     birthday: string
     description: string
     avatar: string
@@ -27,17 +33,23 @@ const defaultWeddingDate = new Date('2026-03-27')
 export function CoupleSection({
   weddingDate = defaultWeddingDate,
   bride = {
-    name: "Bride Name",
-    parent: "Parents' Names",
+    name: "Nguyen Khanh Linh",
+    parent: {
+      father: "Father's Name",
+      mother: "Mother's Name",
+    },
     birthday: "Birthday",
-    description: "A beautiful description about the bride...",
+    description: "Enim dolor lorem amet ex ex laboris labore. Culpa elit dolor tempor cillum aliqua tempor. Ullamco sint irure id nisi enim fugiat aliquip non commodo irure. Pariatur labore consequat aute non nostrud voluptate. Labore dolor tempor sunt consectetur excepteur voluptate enim...",
     avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80",
   },
   groom = {
-    name: "Groom Name",
-    parent: "Parents' Names",
+    name: "Tran Thai Duong",
+    parent: {
+      father: "Father's Name",
+      mother: "Mother's Name",
+    },
     birthday: "Birthday",
-    description: "A wonderful description about the groom...",
+    description: "Esse ullamco sint velit non lorem cillum elit pariatur ex do exercitation. Aliquip irure pariatur tempor aute. Quis adipiscing dolor tempor veniam proident lorem anim magna do enim. Laborum magna nostrud id fugiat ullamco reprehenderit veniam culpa. Proident eiusmod ipsum non irure...",
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
   },
   centerImage = "https://images.unsplash.com/photo-1722805740177-04256b6517f2?w=1200&q=80",
@@ -58,8 +70,8 @@ export function CoupleSection({
   const mouseXSpring = useSpring(x, { stiffness: 500, damping: 100 })
   const mouseYSpring = useSpring(y, { stiffness: 500, damping: 100 })
   
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["7.5deg", "-7.5deg"])
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-7.5deg", "7.5deg"])
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"])
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"])
   
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!centerImageRef.current) return
@@ -172,12 +184,14 @@ export function CoupleSection({
                   animate={isInView ? { scale: 1 } : {}}
                   transition={{ delay: 0.6, type: "spring" }}
                 />
-                <h3 className="text-3xl font-bold mb-2">{groom.name}</h3>
+                <h3 className="text-[40px] mb-2 font-hermaiona">{groom.name}</h3>
                 <p className="text-muted-foreground mb-2">
-                  Son of {groom.parent}
+                  <span className="font-bold">Father:</span> {groom.parent.father}
+                  <br />
+                  <span className="font-bold">Mother:</span> {groom.parent.mother}
                 </p>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Born: {groom.birthday}
+                  <span className="font-bold">Born:</span> {groom.birthday}
                 </p>
                 <p className="text-sm leading-relaxed">{groom.description}</p>
               </div>
@@ -189,8 +203,9 @@ export function CoupleSection({
             ref={centerImageRef}
             initial={{ scale: 0, opacity: 0 }}
             animate={isInView ? { scale: 1, opacity: 1 } : {}}
-            transition={{ duration: 0.8, delay: 0.3, type: "spring" }}
+            transition={{ duration: 0.8, type: "spring" }}
             className="relative p-8 z-10"
+            whileHover={{ scale: 1.05 }}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             style={{
@@ -230,12 +245,14 @@ export function CoupleSection({
                   animate={isInView ? { scale: 1 } : {}}
                   transition={{ delay: 0.6, type: "spring" }}
                 />
-                <h3 className="text-3xl font-bold mb-2">{bride.name}</h3>
+                <h3 className="text-[40px] mb-2 font-hermaiona">{bride.name}</h3>
                 <p className="text-muted-foreground mb-2">
-                  Daughter of {bride.parent}
+                  <span className="font-bold">Father:</span> {bride.parent.father}
+                  <br />
+                  <span className="font-bold">Mother:</span> {bride.parent.mother}
                 </p>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Born: {bride.birthday}
+                  <span className="font-bold">Born:</span> {bride.birthday}
                 </p>
                 <p className="text-sm leading-relaxed">{bride.description}</p>
               </div>
