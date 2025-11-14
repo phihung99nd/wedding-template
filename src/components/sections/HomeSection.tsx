@@ -23,24 +23,24 @@ const defaultImages = [
 ]
 
 const defaultImageData: ImageData[] = [
-  { url: defaultImages[0], time: "15-03-2026", event: "Thai Duong & Khanh Linh" },
-  { url: defaultImages[1], time: "15-03-2026", event: "Thai Duong & Khanh Linh" },
-  { url: defaultImages[2], time: "15-03-2026", event: "Thai Duong & Khanh Linh" },
-  { url: defaultImages[3], time: "15-03-2026", event: "Thai Duong & Khanh Linh" },
-  { url: defaultImages[4], time: "15-03-2026", event: "Thai Duong & Khanh Linh" },
+  { url: defaultImages[0], time: "27-03-2026", event: "Thai Duong & Khanh Linh" },
+  { url: defaultImages[1], time: "27-03-2026", event: "Thai Duong & Khanh Linh" },
+  { url: defaultImages[2], time: "27-03-2026", event: "Thai Duong & Khanh Linh" },
+  { url: defaultImages[3], time: "27-03-2026", event: "Thai Duong & Khanh Linh" },
+  { url: defaultImages[4], time: "27-03-2026", event: "Thai Duong & Khanh Linh" },
 ]
 
 export function HomeSection({ images = defaultImages, imageData = defaultImageData }: HomeSectionProps) {
   const [positionIndexes, setPositionIndexes] = useState([0, 1, 2, 3, 4]);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  
+
   // Get current image index (the center image)
   const currentImageIndex = 4 - positionIndexes[4];
   const currentImageUrl = images[currentImageIndex];
-  
+
   // Find matching image data by URL or fall back to index
-  const currentImageData = imageData.find(data => data.url === currentImageUrl) 
-    || imageData[currentImageIndex] 
+  const currentImageData = imageData.find(data => data.url === currentImageUrl)
+    || imageData[currentImageIndex]
     || { time: "", event: "" };
 
   // Function to reset the auto-slide interval
@@ -80,10 +80,10 @@ export function HomeSection({ images = defaultImages, imageData = defaultImageDa
 
   const createRotateArray = (index: number) => {
     if (index > 4 || index < 0) throw new Error("Index must be between 0 and 4");
-  
+
     // Create base sequence [0, 1, 2, 3, 4]
     const arr = Array.from({ length: 5 }, (_, i) => i);
-  
+
     // Rotate the array so that the last element equals 4 - index
     const rotated = arr.map((_, i) => (i - index + 5) % 5);
     return rotated;
@@ -96,7 +96,7 @@ export function HomeSection({ images = defaultImages, imageData = defaultImageDa
   // Set up auto-slide interval on mount and clean up on unmount
   useEffect(() => {
     resetInterval();
-    
+
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -124,7 +124,7 @@ export function HomeSection({ images = defaultImages, imageData = defaultImageDa
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 1.1, opacity: 0 }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
-          className="absolute inset-0"
+          className="absolute inset-0 before:content-[''] before:absolute before:inset-0 before:bg-black/20"
         >
           <img
             src={images[4 - positionIndexes[4]]}
@@ -144,14 +144,16 @@ export function HomeSection({ images = defaultImages, imageData = defaultImageDa
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="text-center relative py-8 px-12 w-[800px] max-w-[calc(100%-80px)]"
+            className="text-center relative p-12 w-[800px] max-w-[calc(100%-80px)]"
           >
             {/* Top-left square angle */}
-            <div className="absolute top-0 left-0 w-64 h-16 border-t-2 border-l-2 border-white"></div>
-            
+            <div className="absolute top-0 left-0 w-1/2 h-1/2 border-t-2 border-l-2 border-white"></div>
+            <img src="/src/assets/images/ornament_corner.png" alt="Angle Top Left" className="absolute top-[-20px] right-0 w-[170px] h-[100px]" />
+
             {/* Bottom-right square angle */}
-            <div className="absolute bottom-0 right-0 w-64 h-16 border-b-2 border-r-2 border-white"></div>
-            
+            <div className="absolute bottom-0 right-0 w-1/2 h-1/2 border-b-2 border-r-2 border-white"></div>
+            <img src="/src/assets/images/ornament_corner.png" alt="Angle Bottom Right" className="absolute bottom-[-20px] left-0 rotate-180 w-[170px] h-[100px]" />
+
             <motion.div
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
