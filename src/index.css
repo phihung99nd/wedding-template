@@ -3,7 +3,25 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@font-face {
+  font-family: 'Hermaiona';
+  src: url('/src/assets/fonts/Hermaiona-MVZDw.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ShantellSans';
+  src: url('/src/assets/fonts/ShantellSans-VariableFont_BNCE\,INFM\,SPAC\,wght.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme inline {
+  --font-hermaiona: 'Hermaiona', sans-serif;
+  --font-shantell-sans: 'ShantellSans', sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -115,6 +133,6 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-shantell-sans;
   }
 }

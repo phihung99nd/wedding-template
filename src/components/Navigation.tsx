@@ -20,10 +20,10 @@ export function Navigation() {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50)
-      
+
       // Determine active section based on scroll position
       const scrollPosition = window.scrollY + window.innerHeight / 2
-      
+
       for (const section of sections) {
         const element = document.getElementById(section.id)
         if (element) {
@@ -52,32 +52,31 @@ export function Navigation() {
 
   return (
     <motion.nav
-      initial={{ y: -100 }}
+      initial={{ y: "-100%" }}
       animate={{ y: 0 }}
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         scrolled
           ? "bg-background/95 backdrop-blur-sm shadow-md"
-          : "bg-transparent shadow-md"
+          : "bg-transparent backdrop-blur-xs shadow-md"
       )}
     >
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-center gap-2 flex-wrap">
-          {sections.map((section) => (
-            <Button
-              key={section.id}
-              variant="ghost"
-              size="sm"
-              onClick={() => scrollToSection(section.id)}
-              className={cn(
-                "transition-colors",
-                activeSection === section.id && "bg-accent"
-              )}
-            >
-              {section.label}
-            </Button>
-          ))}
-        </div>
+      <div className="px-4 py-4 flex items-center justify-center gap-2 flex-wrap">
+        {sections.map((section) => (
+          <Button
+            key={section.id}
+            variant="ghost"
+            size="sm"
+            onClick={() => scrollToSection(section.id)}
+            className={cn(
+              "transition-colors",
+              scrolled ? "text-black" : "text-white",
+              activeSection === section.id && "bg-slate-200 text-black",
+            )}
+          >
+            {section.label}
+          </Button>
+        ))}
       </div>
     </motion.nav>
   )

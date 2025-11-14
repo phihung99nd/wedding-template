@@ -7,6 +7,7 @@ import { AlbumSection } from "@/components/sections/AlbumSection"
 import { TimelineSection } from "@/components/sections/TimelineSection"
 import { GuestbookSection } from "@/components/sections/GuestbookSection"
 import { QRSection } from "@/components/sections/QRSection"
+import { HeartDropOverlay } from "@/components/HeartDropOverlay"
 import "./App.css"
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <GuestbookSection />
         <QRSection />
       </main>
+      <HeartDropOverlay />
     </div>
   )
 }

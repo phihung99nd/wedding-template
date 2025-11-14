@@ -22,7 +22,7 @@ interface CoupleSectionProps {
   centerImage?: string
 }
 
-const defaultWeddingDate = new Date('2026-03-15')
+const defaultWeddingDate = new Date('2026-03-27')
 
 export function CoupleSection({
   weddingDate = defaultWeddingDate,
