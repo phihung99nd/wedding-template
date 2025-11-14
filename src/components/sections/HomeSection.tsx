@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "../ui/button";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import ornamentCorner from "../../assets/images/ornament_corner.png";
 
 interface ImageData {
   url: string;
@@ -148,11 +149,11 @@ export function HomeSection({ images = defaultImages, imageData = defaultImageDa
           >
             {/* Top-left square angle */}
             <div className="absolute top-0 left-0 w-1/2 h-1/2 border-t-2 border-l-2 border-white"></div>
-            <img src="/src/assets/images/ornament_corner.png" alt="Angle Top Left" className="absolute top-[-20px] right-0 w-[170px] h-[100px]" />
+            <img src={ornamentCorner} alt="Angle Top Left" className="absolute top-[-20px] right-0 w-[170px] h-[100px]" />
 
             {/* Bottom-right square angle */}
             <div className="absolute bottom-0 right-0 w-1/2 h-1/2 border-b-2 border-r-2 border-white"></div>
-            <img src="/src/assets/images/ornament_corner.png" alt="Angle Bottom Right" className="absolute bottom-[-20px] left-0 rotate-180 w-[170px] h-[100px]" />
+            <img src={ornamentCorner} alt="Angle Bottom Right" className="absolute bottom-[-20px] left-0 rotate-180 w-[170px] h-[100px]" />
 
             <motion.div
               initial={{ scale: 0.9 }}

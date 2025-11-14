@@ -2,6 +2,8 @@ import { useState, useEffect } from "react"
 import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion"
 import { useRef } from "react"
 import floralBorderBackground from "@/assets/images/Floral-Border-Background.png"
+import floralOvalBorder from "../../assets/images/Floral-Oval-Border.png";
+
 
 interface CoupleSectionProps {
   weddingDate?: Date
@@ -221,7 +223,7 @@ export function CoupleSection({
                 className="w-full h-full object-cover"
               />
               <img
-                src="/src/assets/images/Floral-Oval-Border.png"
+                src={floralOvalBorder}
                 alt="Floral Oval Border"
                 className="absolute top-0 left-0 w-full h-full object-contain"
               />
