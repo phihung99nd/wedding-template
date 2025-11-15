@@ -4,8 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @font-face {
-  font-family: 'Hermaiona';
-  src: url('/src/assets/fonts/Hermaiona-MVZDw.ttf') format('truetype');
+  font-family: 'ImperialScript';
+  src: url('/src/assets/fonts/ImperialScript-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -20,7 +20,7 @@
 }
 
 @theme inline {
-  --font-hermaiona: 'Hermaiona', sans-serif;
+  --font-imperial: 'ImperialScript', sans-serif;
   --font-shantell-sans: 'ShantellSans', sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

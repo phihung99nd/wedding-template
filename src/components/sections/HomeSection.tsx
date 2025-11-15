@@ -161,7 +161,7 @@ export function HomeSection({ images = defaultImages, imageData = defaultImageDa
               transition={{ delay: 0.2, duration: 0.4 }}
               className="flex flex-col items-center justify-center text-white"
             >
-              <h1 className="text-5xl md:text-7xl mb-4 drop-shadow-2xl font-hermaiona">
+              <h1 className="text-5xl md:text-7xl mb-4 drop-shadow-2xl font-imperial">
                 {currentImageData.event}
               </h1>
               <h3 className="text-2xl md:text-3xl font-light mb-4 drop-shadow-2xl">

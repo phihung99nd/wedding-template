@@ -186,7 +186,7 @@ export function CoupleSection({
                   animate={isInView ? { scale: 1 } : {}}
                   transition={{ delay: 0.6, type: "spring" }}
                 />
-                <h3 className="text-[40px] mb-2 font-hermaiona">{groom.name}</h3>
+                <h3 className="text-[40px] mb-2 font-imperial">{groom.name}</h3>
                 <p className="text-muted-foreground mb-2">
                   <span className="font-bold">Father:</span> {groom.parent.father}
                   <br />
@@ -247,7 +247,7 @@ export function CoupleSection({
                   animate={isInView ? { scale: 1 } : {}}
                   transition={{ delay: 0.6, type: "spring" }}
                 />
-                <h3 className="text-[40px] mb-2 font-hermaiona">{bride.name}</h3>
+                <h3 className="text-[40px] mb-2 font-imperial">{bride.name}</h3>
                 <p className="text-muted-foreground mb-2">
                   <span className="font-bold">Father:</span> {bride.parent.father}
                   <br />
