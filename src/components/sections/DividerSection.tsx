@@ -1,18 +1,24 @@
+import { useState } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Heart } from "lucide-react"
+import { ConfirmationFormDialog } from "@/components/ConfirmationFormDialog"
 
 interface DividerSectionProps {
   onConfirmClick?: () => void
   onGuestbookClick?: () => void
   onQRClick?: () => void
+  scriptUrl?: string
 }
 
 export function DividerSection({
   onConfirmClick,
   onGuestbookClick,
   onQRClick,
+  scriptUrl,
 }: DividerSectionProps) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id)
     if (element) {
@@ -30,7 +36,7 @@ export function DividerSection({
           transition={{ duration: 0.6 }}
           className="flex flex-col items-center gap-6"
         >
-          <Heart className="w-12 h-12 text-primary fill-primary" />
+          <Heart className="w-12 h-12 text-rose-500 fill-rose-500" />
           <h2 className="text-3xl font-bold text-center">
             Join Us in Celebrating Our Special Day
           </h2>
@@ -43,8 +49,7 @@ export function DividerSection({
               size="lg"
               onClick={() => {
                 onConfirmClick?.()
-                // You can add a modal or form here
-                alert("Thank you! Please fill out the confirmation form.")
+                setIsDialogOpen(true)
               }}
             >
               Confirm Participation
@@ -72,6 +77,11 @@ export function DividerSection({
           </div>
         </motion.div>
       </div>
+      <ConfirmationFormDialog
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        scriptUrl={scriptUrl}
+      />
     </div>
   )
 }
