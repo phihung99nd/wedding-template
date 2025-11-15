@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion"
 import { useRef } from "react"
 import floralBorderBackground from "@/assets/images/Floral-Border-Background.png"
+import floralBorderAvatar from "../../assets/images/Floral-Border-Avatar.png";
 import floralOvalBorder from "../../assets/images/Floral-Oval-Border.png";
 
 
@@ -152,7 +153,8 @@ export function CoupleSection({
                     backgroundImage: `url(${floralBorderBackground})`,
                     backgroundSize: 'contain',
                     backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'center'
+                    backgroundPosition: 'center',
+                    filter: 'hue-rotate(200deg) saturate(15) brightness(1)', // turn from gray image to light blue image
                   }}
                 >
                   <div className="text-4xl font-bold text-primary">
@@ -178,14 +180,26 @@ export function CoupleSection({
           >
             <div className="p-6">
               <div className="flex flex-col items-center text-center">
-                <motion.img
-                  src={groom.avatar}
-                  alt={groom.name}
-                  className="w-32 h-32 rounded-full object-cover mb-4 border-4 border-primary"
+                <motion.div
+                  className="relative w-44 h-44 mb-4 p-4"
                   initial={{ scale: 0 }}
                   animate={isInView ? { scale: 1 } : {}}
                   transition={{ delay: 0.6, type: "spring" }}
-                />
+                >
+                  <img
+                    src={groom.avatar}
+                    alt={groom.name}
+                    className="w-full h-full rounded-full object-cover"
+                  />
+                  <img
+                    src={floralBorderAvatar}
+                    alt="Floral Border"
+                    className="absolute top-0 left-0 w-full h-full object-contain pointer-events-none"
+                    style={{
+                      filter: 'hue-rotate(0deg) saturate(1) brightness(1)',
+                    }}
+                  />
+                </motion.div>
                 <h3 className="text-[40px] mb-2 font-imperial">{groom.name}</h3>
                 <p className="text-muted-foreground mb-2">
                   <span className="font-bold">Father:</span> {groom.parent.father}
@@ -239,14 +253,26 @@ export function CoupleSection({
           >
             <div className="p-6">
               <div className="flex flex-col items-center text-center">
-                <motion.img
-                  src={bride.avatar}
-                  alt={bride.name}
-                  className="w-32 h-32 rounded-full object-cover mb-4 border-4 border-primary"
+                <motion.div
+                  className="relative w-44 h-44 mb-4 p-4"
                   initial={{ scale: 0 }}
                   animate={isInView ? { scale: 1 } : {}}
                   transition={{ delay: 0.6, type: "spring" }}
-                />
+                >
+                  <img
+                    src={bride.avatar}
+                    alt={bride.name}
+                    className="w-full h-full rounded-full object-cover"
+                  />
+                  <img
+                    src={floralBorderAvatar}
+                    alt="Floral Border"
+                    className="absolute top-0 left-0 w-full h-full object-contain pointer-events-none"
+                    style={{
+                      filter: 'hue-rotate(120deg) saturate(2) brightness(1)',
+                    }}
+                  />
+                </motion.div>
                 <h3 className="text-[40px] mb-2 font-imperial">{bride.name}</h3>
                 <p className="text-muted-foreground mb-2">
                   <span className="font-bold">Father:</span> {bride.parent.father}
