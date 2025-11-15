@@ -18,7 +18,7 @@ export function HeartDropOverlay() {
   useEffect(() => {
     // Generate hearts
     const generateHearts = () => {
-      const count = 50; // Number of hearts
+      const count = 30; // Number of hearts
       const newHearts: Heart[] = [];
 
       for (let i = 0; i < count; i++) {

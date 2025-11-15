@@ -9,11 +9,13 @@ import { GuestbookSection } from "@/components/sections/GuestbookSection"
 import { QRSection } from "@/components/sections/QRSection"
 import { HeartDropOverlay } from "@/components/HeartDropOverlay"
 import { LoadingOverlay } from "@/components/LoadingOverlay"
+import { BackgroundAudio } from "@/components/BackgroundAudio"
 import "./App.css"
 
 function App() {
   return (
     <div className="min-h-screen">
+      <BackgroundAudio />
       <LoadingOverlay />
       <Navigation />
       <main>
