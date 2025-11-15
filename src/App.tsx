@@ -8,11 +8,13 @@ import { TimelineSection } from "@/components/sections/TimelineSection"
 import { GuestbookSection } from "@/components/sections/GuestbookSection"
 import { QRSection } from "@/components/sections/QRSection"
 import { HeartDropOverlay } from "@/components/HeartDropOverlay"
+import { LoadingOverlay } from "@/components/LoadingOverlay"
 import "./App.css"
 
 function App() {
   return (
     <div className="min-h-screen">
+      <LoadingOverlay />
       <Navigation />
       <main>
         <HomeSection />
