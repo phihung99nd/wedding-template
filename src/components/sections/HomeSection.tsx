@@ -183,7 +183,7 @@ export function HomeSection({ images = defaultImages, imageData = defaultImageDa
               key={index}
               src={image}
               alt={image}
-              className="rounded-[12px] shadow-2xl border border-white/20"
+              className="rounded-[12px] shadow-2xl border border-white/20 w-[40%] aspect-[16/9] object-cover"
               initial="hidden"
               animate={positions[positionIndexes[index]]}
               variants={imageVariants}
