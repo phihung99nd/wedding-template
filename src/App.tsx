@@ -17,6 +17,7 @@ function App() {
     <div className="min-h-screen">
       <BackgroundAudio />
       <LoadingOverlay />
+      <HeartDropOverlay />
       <Navigation />
       <main>
         <HomeSection />
@@ -28,7 +29,6 @@ function App() {
         <GuestbookSection />
         <QRSection />
       </main>
-      <HeartDropOverlay />
     </div>
   )
 }

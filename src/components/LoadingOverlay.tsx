@@ -1,249 +1,249 @@
-import { useState, useEffect, useRef } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function LoadingOverlay() {
-  const [isLoading, setIsLoading] = useState(true)
-  const [progress, setProgress] = useState(0)
-  const currentProgressRef = useRef(0)
+  const [isLoading, setIsLoading] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const currentProgressRef = useRef(0);
 
   useEffect(() => {
-    let imagesLoaded = 0
-    let fontsLoaded = false
-    let totalImages = 0
-    let progressInterval: ReturnType<typeof setInterval>
-    let isMounted = true
+    let imagesLoaded = 0;
+    let fontsLoaded = false;
+    let totalImages = 0;
+    let progressInterval: ReturnType<typeof setInterval>;
+    let isMounted = true;
 
     // Function to check if fonts are loaded
     const checkFontsLoaded = async (): Promise<void> => {
       try {
         // Wait for document.fonts.ready if available
         if (document.fonts && document.fonts.ready) {
-          await document.fonts.ready
+          await document.fonts.ready;
         }
 
         // Check for custom fonts defined in CSS
-        const fontFamilies = ['ImperialScript', 'ShantellSans']
-        
+        const fontFamilies = ["ImperialScript", "ShantellSans"];
+
         // Wait for all fonts to be loaded
         const fontPromises = fontFamilies.map((fontFamily) => {
           if (document.fonts.check(`16px "${fontFamily}"`)) {
-            return Promise.resolve()
+            return Promise.resolve();
           }
-          
+
           return new Promise<void>((resolve) => {
             const timeout = setTimeout(() => {
-              resolve() // Resolve after timeout to prevent hanging
-            }, 5000)
-            
+              resolve(); // Resolve after timeout to prevent hanging
+            }, 5000);
+
             const checkFont = () => {
               if (document.fonts.check(`16px "${fontFamily}"`)) {
-                clearTimeout(timeout)
-                resolve()
+                clearTimeout(timeout);
+                resolve();
               } else {
-                requestAnimationFrame(checkFont)
+                requestAnimationFrame(checkFont);
               }
-            }
-            checkFont()
-          })
-        })
+            };
+            checkFont();
+          });
+        });
 
-        await Promise.all(fontPromises)
-        
+        await Promise.all(fontPromises);
+
         if (isMounted) {
-          fontsLoaded = true
-          updateProgress()
+          fontsLoaded = true;
+          updateProgress();
         }
       } catch (error) {
-        console.warn('Font loading check failed:', error)
+        console.warn("Font loading check failed:", error);
         if (isMounted) {
-          fontsLoaded = true // Continue even if font check fails
-          updateProgress()
+          fontsLoaded = true; // Continue even if font check fails
+          updateProgress();
         }
       }
-    }
+    };
 
     // Function to find all images in the document
     const findAllImages = (): Promise<HTMLImageElement[]> => {
       return new Promise((resolve) => {
-        const images: HTMLImageElement[] = []
-        const processedUrls = new Set<string>()
-        
+        const images: HTMLImageElement[] = [];
+        const processedUrls = new Set<string>();
+
         // Find all img elements
-        const imgElements = document.querySelectorAll('img')
+        const imgElements = document.querySelectorAll("img");
         imgElements.forEach((img) => {
           if (img.src && !processedUrls.has(img.src)) {
-            processedUrls.add(img.src)
-            images.push(img)
+            processedUrls.add(img.src);
+            images.push(img);
           }
-        })
+        });
 
         // Find all elements with background images
-        const allElements = document.querySelectorAll('*')
+        const allElements = document.querySelectorAll("*");
         allElements.forEach((el) => {
-          const bgImage = window.getComputedStyle(el).backgroundImage
-          if (bgImage && bgImage !== 'none') {
-            const urlMatch = bgImage.match(/url\(['"]?([^'"]+)['"]?\)/)
+          const bgImage = window.getComputedStyle(el).backgroundImage;
+          if (bgImage && bgImage !== "none") {
+            const urlMatch = bgImage.match(/url\(['"]?([^'"]+)['"]?\)/);
             if (urlMatch && urlMatch[1]) {
-              const url = urlMatch[1]
+              const url = urlMatch[1];
               if (!processedUrls.has(url)) {
-                processedUrls.add(url)
-                const img = new Image()
-                img.src = url
-                images.push(img)
+                processedUrls.add(url);
+                const img = new Image();
+                img.src = url;
+                images.push(img);
               }
             }
           }
-        })
+        });
 
-        resolve(images)
-      })
-    }
+        resolve(images);
+      });
+    };
 
     // Function to load all images
     const loadAllImages = (): Promise<void> => {
       return findAllImages().then((images) => {
         return new Promise<void>((resolve) => {
-          totalImages = images.length
+          totalImages = images.length;
 
           if (totalImages === 0) {
-            imagesLoaded = 0
-            resolve()
-            return
+            imagesLoaded = 0;
+            resolve();
+            return;
           }
 
-          let loadedCount = 0
-          let errorCount = 0
+          let loadedCount = 0;
+          let errorCount = 0;
 
           const checkComplete = () => {
             if (loadedCount + errorCount >= totalImages && isMounted) {
-              imagesLoaded = totalImages
-              updateProgress()
-              resolve()
+              imagesLoaded = totalImages;
+              updateProgress();
+              resolve();
             }
-          }
+          };
 
           images.forEach((img) => {
             if (img.complete && img.naturalHeight !== 0) {
-              loadedCount++
-              checkComplete()
+              loadedCount++;
+              checkComplete();
             } else {
               const onLoad = () => {
-                loadedCount++
+                loadedCount++;
                 if (isMounted) {
-                  updateProgress()
+                  updateProgress();
                 }
-                checkComplete()
-              }
-              
-              const onError = () => {
-                errorCount++
-                if (isMounted) {
-                  updateProgress()
-                }
-                checkComplete()
-              }
+                checkComplete();
+              };
 
-              img.onload = onLoad
-              img.onerror = onError
-              
+              const onError = () => {
+                errorCount++;
+                if (isMounted) {
+                  updateProgress();
+                }
+                checkComplete();
+              };
+
+              img.onload = onLoad;
+              img.onerror = onError;
+
               // If image is already loading, trigger check
               if (img.complete) {
                 if (img.naturalHeight === 0) {
-                  onError()
+                  onError();
                 } else {
-                  onLoad()
+                  onLoad();
                 }
               }
             }
-          })
+          });
 
           // If all images are already loaded
           if (loadedCount === totalImages) {
-            imagesLoaded = totalImages
-            resolve()
+            imagesLoaded = totalImages;
+            resolve();
           }
-        })
-      })
-    }
+        });
+      });
+    };
 
     // Update progress - only increases, never decreases
     const updateProgress = () => {
-      if (!isMounted) return
-      
-      const imageProgress = totalImages > 0 ? imagesLoaded / totalImages : 1
-      const fontProgress = fontsLoaded ? 1 : 0
-      const overallProgress = (imageProgress + fontProgress) / 2
-      const newProgress = Math.min(overallProgress * 100, 100)
-      
+      if (!isMounted) return;
+
+      const imageProgress = totalImages > 0 ? imagesLoaded / totalImages : 1;
+      const fontProgress = fontsLoaded ? 1 : 0;
+      const overallProgress = (imageProgress + fontProgress) / 2;
+      const newProgress = Math.min(overallProgress * 100, 100);
+
       // Only update if progress increased (monotonic)
       if (newProgress > currentProgressRef.current) {
-        currentProgressRef.current = newProgress
-        setProgress(newProgress)
+        currentProgressRef.current = newProgress;
+        setProgress(newProgress);
       }
-    }
+    };
 
     // Gentle progress animation that doesn't conflict with real progress
     const startProgressAnimation = () => {
       progressInterval = setInterval(() => {
         if (!isMounted) {
-          clearInterval(progressInterval)
-          return
+          clearInterval(progressInterval);
+          return;
         }
         // Only animate if we're still at 0 or very low progress
         // Once real progress starts, let it take over
         if (currentProgressRef.current < 5) {
-          const gentleIncrease = Math.min(currentProgressRef.current + 0.5, 5)
+          const gentleIncrease = Math.min(currentProgressRef.current + 0.5, 5);
           if (gentleIncrease > currentProgressRef.current) {
-            currentProgressRef.current = gentleIncrease
-            setProgress(gentleIncrease)
+            currentProgressRef.current = gentleIncrease;
+            setProgress(gentleIncrease);
           }
         } else {
           // Stop the animation once real progress kicks in
-          clearInterval(progressInterval)
+          clearInterval(progressInterval);
         }
-      }, 200)
-    }
+      }, 200);
+    };
 
     // Main loading logic
     const initializeLoading = async () => {
-      startProgressAnimation()
+      startProgressAnimation();
 
       // Wait a bit for DOM to be ready and initial render
-      await new Promise((resolve) => setTimeout(resolve, 200))
+      await new Promise((resolve) => setTimeout(resolve, 200));
 
-      if (!isMounted) return
+      if (!isMounted) return;
 
       // Load images and fonts in parallel
-      await Promise.all([loadAllImages(), checkFontsLoaded()])
+      await Promise.all([loadAllImages(), checkFontsLoaded()]);
 
-      if (!isMounted) return
+      if (!isMounted) return;
 
       // Ensure progress reaches 100%
-      currentProgressRef.current = 100
-      setProgress(100)
+      currentProgressRef.current = 100;
+      setProgress(100);
 
       // Small delay before hiding overlay for smooth transition
-      await new Promise((resolve) => setTimeout(resolve, 300))
+      await new Promise((resolve) => setTimeout(resolve, 300));
 
       if (isMounted) {
         if (progressInterval) {
-          clearInterval(progressInterval)
+          clearInterval(progressInterval);
         }
         setTimeout(() => {
-          setIsLoading(false)
-        }, 500)
+          setIsLoading(false);
+        }, 500);
       }
-    }
+    };
 
-    initializeLoading()
+    initializeLoading();
 
     return () => {
-      isMounted = false
+      isMounted = false;
       if (progressInterval) {
-        clearInterval(progressInterval)
+        clearInterval(progressInterval);
       }
-    }
-  }, [])
+    };
+  }, []);
 
   return (
     <AnimatePresence>
@@ -365,11 +365,15 @@ export function LoadingOverlay() {
                   />
                 ))}
               </motion.div>
+
+              {/* Credit */}
+              <div className="text-sm text-muted-foreground">
+                Design by HungTP
+              </div>
             </div>
           </div>
         </motion.div>
       )}
     </AnimatePresence>
-  )
+  );
 }
-

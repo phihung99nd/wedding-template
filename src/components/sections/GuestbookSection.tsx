@@ -1,6 +1,5 @@
-import { useState } from "react"
-import { motion, useInView } from "framer-motion"
-import { useRef } from "react"
+import { useState, useRef } from "react"
+import { AnimatePresence, motion, useInView } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -12,7 +11,7 @@ export function GuestbookSection() {
   const [message, setMessage] = useState("")
   const [submitted, setSubmitted] = useState(false)
   const sectionRef = useRef(null)
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" })
+  const isInView = useInView(sectionRef, { margin: "-100px" })
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -33,23 +32,28 @@ export function GuestbookSection() {
       className="min-h-screen py-20 px-4 bg-gradient-to-b from-muted/20 to-background"
     >
       <div className="container mx-auto max-w-2xl">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-12"
-        >
-          <h2 className="text-4xl font-bold text-center mb-4">Guestbook</h2>
-          <p className="text-center text-muted-foreground">
-            Leave a message and share your wishes for the happy couple
-          </p>
-        </motion.div>
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            exit={{ opacity: 0, y: 50 }}
+            transition={{ duration: 0.6 }}
+            className="mb-12"
+          >
+            <h2 className="text-4xl font-bold text-center mb-4">Guestbook</h2>
+            <p className="text-center text-muted-foreground">
+              Leave a message and share your wishes for the happy couple
+            </p>
+          </motion.div>
+        </AnimatePresence>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            exit={{ opacity: 0, y: 30 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -107,6 +111,7 @@ export function GuestbookSection() {
             </CardContent>
           </Card>
         </motion.div>
+        </AnimatePresence>
       </div>
     </section>
   )

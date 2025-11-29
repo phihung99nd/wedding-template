@@ -1,4 +1,4 @@
-import { motion, useInView } from "framer-motion"
+import { AnimatePresence, motion, useInView } from "framer-motion"
 import { useRef } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 
@@ -58,7 +58,7 @@ export function LoveStorySection({
   milestones = defaultMilestones,
 }: LoveStorySectionProps) {
   const sectionRef = useRef(null)
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" })
+  const isInView = useInView(sectionRef, { margin: "-100px" })
 
   return (
     <section
@@ -67,25 +67,30 @@ export function LoveStorySection({
       className="min-h-screen py-20 px-4 bg-background"
     >
       <div className="container mx-auto max-w-7xl">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
-        >
-          <h2 className="text-4xl font-bold text-center mb-4">Our Love Story</h2>
-          <p className="text-center text-muted-foreground max-w-2xl mx-auto">
-            A journey of love, laughter, and unforgettable moments
-          </p>
-        </motion.div>
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            exit={{ opacity: 0, y: 50 }}
+            transition={{ duration: 0.6 }}
+            className="mb-16"
+          >
+            <h2 className="text-4xl font-bold text-center mb-4">Our Love Story</h2>
+            <p className="text-center text-muted-foreground max-w-2xl mx-auto">
+              A journey of love, laughter, and unforgettable moments
+            </p>
+          </motion.div>
+        </AnimatePresence>
 
         {/* Video Section */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={isInView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-20"
-        >
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="mb-20"
+          >
           <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-2xl">
             <video
               src={videoUrl}
@@ -97,6 +102,7 @@ export function LoveStorySection({
             </video>
           </div>
         </motion.div>
+        </AnimatePresence>
 
         {/* Timeline Tree */}
         <div className="relative">
@@ -105,23 +111,28 @@ export function LoveStorySection({
 
           {/* Milestones */}
           <div className="space-y-12">
-            {milestones.map((milestone, index) => (
-              <motion.div
-                key={index}
-                initial={{
-                  opacity: 0,
-                  x: milestone.side === "left" ? -50 : 50,
-                }}
-                animate={
-                  isInView
-                    ? { opacity: 1, x: 0 }
-                    : { opacity: 0, x: milestone.side === "left" ? -50 : 50 }
-                }
-                transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
-                className={`flex items-center gap-8 ${
-                  milestone.side === "left" ? "flex-row" : "flex-row-reverse"
-                }`}
-              >
+            <AnimatePresence>
+              {milestones.map((milestone, index) => (
+                <motion.div
+                  key={index}
+                  initial={{
+                    opacity: 0,
+                    x: milestone.side === "left" ? -50 : 50,
+                  }}
+                  animate={
+                    isInView
+                      ? { opacity: 1, x: 0 }
+                      : { opacity: 0, x: milestone.side === "left" ? -50 : 50 }
+                  }
+                  exit={{
+                    opacity: 0,
+                    x: milestone.side === "left" ? -50 : 50,
+                  }}
+                  transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
+                  className={`flex items-center gap-8 ${
+                    milestone.side === "left" ? "flex-row" : "flex-row-reverse"
+                  }`}
+                >
                 {/* Content Card */}
                 <div
                   className={`flex-1 ${
@@ -151,7 +162,8 @@ export function LoveStorySection({
                 {/* Empty space for alignment */}
                 <div className="flex-1 hidden md:block" />
               </motion.div>
-            ))}
+              ))}
+            </AnimatePresence>
           </div>
         </div>
       </div>

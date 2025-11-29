@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { motion } from "framer-motion"
+import { useState, useRef } from "react"
+import { AnimatePresence, motion, useInView } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Heart } from "lucide-react"
 import { ConfirmationFormDialog } from "@/components/ConfirmationFormDialog"
@@ -18,6 +18,8 @@ export function DividerSection({
   scriptUrl,
 }: DividerSectionProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const sectionRef = useRef(null)
+  const isInView = useInView(sectionRef, { margin: "-100px" })
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id)
@@ -27,15 +29,19 @@ export function DividerSection({
   }
 
   return (
-    <div className="py-16 px-4 bg-gradient-to-r from-primary/10 via-background to-primary/10">
+    <div
+      ref={sectionRef}
+      className="py-16 px-4 bg-gradient-to-r from-primary/10 via-background to-primary/10"
+    >
       <div className="container mx-auto max-w-4xl">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="flex flex-col items-center gap-6"
-        >
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            exit={{ opacity: 0, y: 30 }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col items-center gap-6"
+          >
           <Heart className="w-12 h-12 text-rose-500 fill-rose-500" />
           <h2 className="text-3xl font-bold text-center">
             Join Us in Celebrating Our Special Day
@@ -75,7 +81,8 @@ export function DividerSection({
               Send Blessings
             </Button>
           </div>
-        </motion.div>
+          </motion.div>
+        </AnimatePresence>
       </div>
       <ConfirmationFormDialog
         open={isDialogOpen}

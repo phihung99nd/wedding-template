@@ -1,4 +1,4 @@
-import { motion, useInView } from "framer-motion"
+import { AnimatePresence, motion, useInView } from "framer-motion"
 import { useRef } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { QrCode, CreditCard } from "lucide-react"
@@ -17,7 +17,7 @@ export function QRSection({
   accountHolder = "Couple Name",
 }: QRSectionProps) {
   const sectionRef = useRef(null)
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" })
+  const isInView = useInView(sectionRef, { margin: "-100px" })
 
   return (
     <section
@@ -26,27 +26,32 @@ export function QRSection({
       className="min-h-screen py-20 px-4 bg-background"
     >
       <div className="container mx-auto max-w-4xl">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-12"
-        >
-          <h2 className="text-4xl font-bold text-center mb-4">
-            Send Your Blessings
-          </h2>
-          <p className="text-center text-muted-foreground max-w-2xl mx-auto">
-            Your presence is the greatest gift, but if you wish to send a
-            blessing, you can use the QR code below
-          </p>
-        </motion.div>
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            exit={{ opacity: 0, y: 50 }}
+            transition={{ duration: 0.6 }}
+            className="mb-12"
+          >
+            <h2 className="text-4xl font-bold text-center mb-4">
+              Send Your Blessings
+            </h2>
+            <p className="text-center text-muted-foreground max-w-2xl mx-auto">
+              Your presence is the greatest gift, but if you wish to send a
+              blessing, you can use the QR code below
+            </p>
+          </motion.div>
+        </AnimatePresence>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={isInView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex justify-center"
-        >
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex justify-center"
+          >
           <Card className="max-w-md w-full">
             <CardHeader className="text-center">
               <div className="flex justify-center mb-4">
@@ -101,6 +106,7 @@ export function QRSection({
             </CardContent>
           </Card>
         </motion.div>
+        </AnimatePresence>
       </div>
     </section>
   )

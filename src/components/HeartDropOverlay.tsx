@@ -52,7 +52,7 @@ export function HeartDropOverlay() {
             left: `${heart.left}%`,
             fontSize: `${heart.size}px`,
             opacity: heart.opacity,
-            animation: `fall ${heart.animationDuration}s linear infinite`,
+            animation: `fall ${heart.animationDuration}s linear 5`,
             animationDelay: `${heart.delay}s`,
             filter: "drop-shadow(0 0 2px rgba(255, 192, 203, 0.5))",
           }}

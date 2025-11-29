@@ -121,9 +121,9 @@ export function HomeSection({ images = defaultImages, imageData = defaultImageDa
       <AnimatePresence mode="wait">
         <motion.div
           key={4 - positionIndexes[4]}
-          initial={{ scale: 1.1, opacity: 0 }}
+          initial={{ scale: 1.05, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 1.1, opacity: 0 }}
+          exit={{ scale: 1.05, opacity: 0 }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
           className="absolute inset-0 before:content-[''] before:absolute before:inset-0 before:bg-black/20"
         >

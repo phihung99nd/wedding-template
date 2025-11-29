@@ -1,6 +1,5 @@
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { motion, useInView, AnimatePresence } from "framer-motion"
-import { useRef } from "react"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { X } from "lucide-react"
 
@@ -24,7 +23,7 @@ export function AlbumSection({ photos = defaultPhotos }: AlbumSectionProps) {
   const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null)
   const [clickedIndex, setClickedIndex] = useState<number | null>(null)
   const sectionRef = useRef(null)
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" })
+  const isInView = useInView(sectionRef, { margin: "-100px" })
 
   const handlePhotoClick = (photo: string, index: number) => {
     setClickedIndex(index)
@@ -44,45 +43,51 @@ export function AlbumSection({ photos = defaultPhotos }: AlbumSectionProps) {
         className="min-h-screen py-20 px-4 bg-gradient-to-b from-background to-muted/20"
       >
         <div className="container mx-auto max-w-7xl">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="mb-12"
-          >
-            <h2 className="text-4xl font-bold text-center mb-4">
-              Our Wedding Album
-            </h2>
-            <p className="text-center text-muted-foreground max-w-2xl mx-auto">
-              Capturing beautiful moments from our special day
-            </p>
-          </motion.div>
+          <AnimatePresence>
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              exit={{ opacity: 0, y: 50 }}
+              transition={{ duration: 0.6 }}
+              className="mb-12"
+            >
+              <h2 className="text-4xl font-bold text-center mb-4">
+                Our Wedding Album
+              </h2>
+              <p className="text-center text-muted-foreground max-w-2xl mx-auto">
+                Capturing beautiful moments from our special day
+              </p>
+            </motion.div>
+          </AnimatePresence>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {photos.map((photo, index) => {
-              const row = Math.floor(index / 3)
-              const col = index % 3
-              const delay = (row + col) * 0.1
+            <AnimatePresence>
+              {photos.map((photo, index) => {
+                const row = Math.floor(index / 3)
+                const col = index % 3
+                const delay = (row + col) * 0.1
 
-              return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                  transition={{ duration: 0.5, delay }}
-                  className="relative aspect-square overflow-hidden rounded-lg cursor-pointer group"
-                  onClick={() => handlePhotoClick(photo, index)}
-                  layoutId={`photo-${index}`}
-                >
-                  <img
-                    src={photo}
-                    alt={`Photo ${index + 1}`}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
-                </motion.div>
-              )
-            })}
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    transition={{ duration: 0.5, delay }}
+                    className="relative aspect-square overflow-hidden rounded-lg cursor-pointer group"
+                    onClick={() => handlePhotoClick(photo, index)}
+                    layoutId={`photo-${index}`}
+                  >
+                    <img
+                      src={photo}
+                      alt={`Photo ${index + 1}`}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
+                  </motion.div>
+                )
+              })}
+            </AnimatePresence>
           </div>
         </div>
       </section>

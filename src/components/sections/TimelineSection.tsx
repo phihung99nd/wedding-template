@@ -1,4 +1,4 @@
-import { motion, useInView } from "framer-motion"
+import { AnimatePresence, motion, useInView } from "framer-motion"
 import { useRef } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Clock, MapPin, Shirt } from "lucide-react"
@@ -53,7 +53,7 @@ const defaultEvents: Event[] = [
 
 export function TimelineSection({ events = defaultEvents }: TimelineSectionProps) {
   const sectionRef = useRef(null)
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" })
+  const isInView = useInView(sectionRef, { margin: "-100px" })
 
   return (
     <section
@@ -62,28 +62,33 @@ export function TimelineSection({ events = defaultEvents }: TimelineSectionProps
       className="min-h-screen py-20 px-4 bg-background"
     >
       <div className="container mx-auto max-w-6xl">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
-        >
-          <h2 className="text-4xl font-bold text-center mb-4">
-            Wedding Timeline
-          </h2>
-          <p className="text-center text-muted-foreground max-w-2xl mx-auto">
-            Join us throughout the day for these special moments
-          </p>
-        </motion.div>
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            exit={{ opacity: 0, y: 50 }}
+            transition={{ duration: 0.6 }}
+            className="mb-16"
+          >
+            <h2 className="text-4xl font-bold text-center mb-4">
+              Wedding Timeline
+            </h2>
+            <p className="text-center text-muted-foreground max-w-2xl mx-auto">
+              Join us throughout the day for these special moments
+            </p>
+          </motion.div>
+        </AnimatePresence>
 
         <div className="space-y-6">
-          {events.map((event, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-            >
+          <AnimatePresence>
+            {events.map((event, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                exit={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+              >
               <Card className="overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="flex flex-col md:flex-row">
                   <div className="md:w-1/3 h-64 md:h-auto">
@@ -120,7 +125,8 @@ export function TimelineSection({ events = defaultEvents }: TimelineSectionProps
                 </div>
               </Card>
             </motion.div>
-          ))}
+            ))}
+          </AnimatePresence>
         </div>
       </div>
     </section>
